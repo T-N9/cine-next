@@ -1,0 +1,267 @@
+@import '../../styles/mixins';
+@import '../../styles/variables';
+@import '../../styles/utilities';
+
+.detail_hero {
+    margin-top: calUni(67.98px);
+    background-color: $clr-dark;
+    background-position: top right;
+    background-size: 90%;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+
+    @include m-breakpoint-up(lmedium) {
+        margin-top: calUni(67.98px);
+    }
+
+    @include m-breakpoint-down(large) {
+        background-position: center center;
+        background-size: cover;
+        background-attachment: scroll;
+    }
+
+    .container_y_2 {
+        padding-bottom: 12rem !important;
+    }
+
+    .detail_wrapper {
+        background: linear-gradient(90deg, rgba($clr-black, 1) 20%, rgba($clr-black, 0.8) 66.08%, rgba($clr-black, 0.5) 100%);
+        backdrop-filter: blur(3px);
+        color: $clr-wah;
+        height: 100%;
+
+        @include m-breakpoint-down(small) {
+            background: linear-gradient(90deg, rgba($clr-black, 0.8) 20%, rgba($clr-black, 0.8) 66.08%, rgba($clr-black, 0.5) 100%);
+        }
+
+        .flex_section{
+            display: flex;
+
+            @include m-breakpoint-down(small) {
+                flex-direction: column;
+                align-items: center;
+            }
+            .detail_poster {
+                position: relative;
+                min-width: calUni(300px);
+                max-height: calc(450px);
+                width: calUni(300px);
+                height: calUni(450px);
+                
+
+                img {
+                    border-radius: 10px;
+                }
+
+            @include m-breakpoint-down(small) {
+                min-width: calUni(200px);
+                min-height: calc(300px);
+                width: calUni(200px);
+                height: calUni(300px);
+            }
+            }
+
+            .placeholder {
+                background-color: $clr-gray;
+                @include flex-center;
+                color: $clr-primary;
+            }
+        }
+
+        .detail_movie_content {
+            margin-left: 2rem;
+
+            @include m-breakpoint-down(small) {
+                margin-left: 0;
+                margin-top: 2rem;
+                width: 100%;
+            }
+
+            .detail_header {
+                display: flex;
+                justify-content: flex-start;
+                align-items: flex-end;
+
+                @include m-breakpoint-down(large) {
+                    // flex-direction: column;
+                    flex-wrap: wrap;
+                }
+
+                .year {
+                    margin-left: 15px;
+                    font-weight: normal;
+                    font-size: $fs-26;
+
+                    @include m-breakpoint-down(large) {
+                        // margin-left: 0;
+                    }
+                }
+            }
+
+            .title {
+                font-size: $fs-32;
+            }
+
+            .content_rating {
+                color: $clr-warning;
+                font-weight: 700;
+                border: 1px solid $clr-warning;
+                padding: 2px;
+
+                p {
+                    margin: 0 !important;
+                }
+            }
+
+            .genres {
+                display: flex;
+                flex-wrap: wrap;
+
+                > * {
+                    @include m-breakpoint-down(small) {
+                        margin-top: 1rem;
+                    }
+                }
+
+                .genre {
+                    padding: 2.5px 5px;
+                    border-radius: 20px;
+                    border: 1px solid $clr-gray;
+                    font-size: 14px;
+                    cursor: pointer;
+
+                    @include m-breakpoint-down(small) {
+                        margin-top: 5px;
+                    }
+
+                }
+
+                > :not(:last-child) {
+                    margin-right: 5px;
+                }
+            }
+
+            .detail_neck {
+                display: flex;
+                justify-content: flex-start;
+                align-items: center;
+                margin-bottom: 2rem;
+
+                > p {
+                    margin-bottom: 0;
+                    margin-left: 20px;
+                }
+
+                .runtime {
+                    @include flex-center;
+
+                    svg {
+                        width: 0.8rem;
+                        margin-right: 5px;
+                    }
+                }
+
+                .coming_soon {
+                    text-transform: uppercase;
+                    font-weight: bold;
+                    color: #f1d900;
+                }
+            }
+
+            .tagline {
+                font-style: italic;
+                color: $clr-gray;
+            }
+
+            .overview {
+                width: 50%;
+
+                @include m-breakpoint-down(lmedium) {
+                    width: 80%;
+                }
+
+                @include m-breakpoint-down(small) {
+                    width: 100%;
+                }
+
+                h1 {
+                    font-size: $fs-22;
+                    margin-bottom: 0.5rem;
+                    color: $clr-gray;
+                }
+            }
+
+            .info {
+                > div {
+                    display: inline-flex;
+                    justify-content: center;
+                    align-items: center;
+                    margin-right: 20px;
+
+                    h1 {
+                        margin: 0;
+                        margin-left: 5px;
+                        font-family: $font-primary;
+                        font-size: $fs-20;
+                    }
+                }
+            }
+
+            .trailer_btn {
+                margin: 15px 0;
+                border-width: 2px;
+                border-color: rgba($clr-primary, 0.8);
+                color: rgba($clr-primary, 0.8);
+                transition: border-color color 200ms ease;
+                text-transform: capitalize;
+
+                &:hover {
+                    border-color: rgba($clr-primary, 1);
+                    color: rgba($clr-primary, 1);
+                }
+            }
+
+            .torrent_wrapper {
+                margin: 1rem 0;
+
+                > h1 {
+                    margin-bottom: 5px;
+                }
+
+                .torrents {
+                    
+                    display: flex;
+                    flex-wrap: wrap;
+    
+                    > :not(:last-child) {
+                        margin-right: 5px;
+                    }
+                    .torrent_item {
+                        background: linear-gradient(1turn,$clr-primary,$clr-light);
+                        margin-bottom: 5px;
+                        padding: 5px 10px;
+                        border-radius: 5px;
+    
+                        .type {
+                            text-transform: capitalize;
+                        }
+    
+                        .quality {
+                            font-weight: bold;
+                        }
+    
+                        p {
+                            margin: 0;
+                        }
+                    }
+                }
+            }
+            
+        }
+    }
+}
+
+.info_loading_error {
+    min-height: 600px;
+    @include flex-center;
+}

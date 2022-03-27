@@ -1,0 +1,33 @@
+// px to rem conversion
+@function calUni($e) {
+    @return calc($e / 16px)+rem;
+}
+
+// color variables
+$clr-primary : #278EA5;
+$clr-secondary : #1F4287;
+$clr-light : #21E6C1;
+$clr-dark : #071E3D;
+$clr-black: #1c2a30;
+$clr-wah : #ffffff;
+$clr-gray : #ebebeb;
+$clr-warning : #dacd18;
+$clr-danger: #FF304F;
+
+$clr-light-overlay: rgba($clr-light, 0.1);
+
+// font variables
+$font-primary : 'Nunito', sans-serif;
+$font-heading : 'Catamaran', sans-serif;
+$font-writing : 'Yellowtail', cursive;
+$font-special : 'Cairo', sans-serif;
+
+// font size variables
+$fs-16: calUni(16px);
+$fs-18: calUni(18px);
+$fs-20: calUni(20px);
+$fs-22: calUni(22px);
+$fs-26: calUni(26px);
+$fs-28: calUni(28px);
+$fs-32: calUni(32px);
+$fs-38: calUni(38px);

@@ -1,0 +1,28 @@
+@import '../../styles/mixins';
+@import '../../styles/variables';
+@import '../../styles/utilities';
+
+.home_hero {
+    padding-top: calUni(75px);
+    background-color: $clr-dark;
+    overflow: hidden;
+
+    @include m-breakpoint-up(lmedium) {
+        padding-top: calUni(94px);
+    }
+}
+
+.error_loading_hero {
+    height: 600px;
+    @include m-breakpoint-up(lmedium) {
+        height: 750px;
+    }
+
+    @include m-breakpoint-up(xlarge) {
+        height: 600px;
+    }
+
+    @include m-breakpoint-up(slarge) {
+        height: 825px;
+    }
+}
