@@ -3,6 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { InsertPhoto , AccessTimeSharp, StarRateRounded, People } from '@mui/icons-material';
 import styles from './DetailHero.module.scss';
+import Torrent from './Torrent';
 import Button from '@mui/material/Button';
 
 const DetailHero = ({ data }) => {
@@ -112,6 +113,7 @@ const DetailHero = ({ data }) => {
     const tagline = data.tagline;
     const rating = data.vote_average;
     const popularity = data.popularity;
+    const imdb_id = data.imdb_id;
 
     const handleTrailer = () => {
         console.log('Trailer')
@@ -215,6 +217,18 @@ const DetailHero = ({ data }) => {
                                 <Button onClick={handleTrailer} variant='outlined' className={styles.trailer_btn}>
                                     View Trailer
                                 </Button>
+
+                                {
+                                    (title && release_year) &&
+                                    (
+                                        
+                                        <Torrent
+                                            title ={title}
+                                            year = {release_year}
+                                            imdb_id = {imdb_id}
+                                        />
+                                    )
+                                }
                             </div>
                         </div>
                     </div>
