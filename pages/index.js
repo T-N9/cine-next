@@ -15,6 +15,11 @@ export default function Home({ trending }) {
   return (
     <div>
       <Head>
+        <meta charSet="utf-8" />
+        <title>CINE | Live cinematic information</title>
+        <link rel="icon" href="/favicon.ico" />
+        <meta name="theme-color" content="#278EA5" />
+
         <meta name="title" content="CINE | Live cinematic information" />
         <meta name="description"
           content="A website that provides you cinematic data with stunning UI. Torrents for movies are also available and just a touch to download them." />
@@ -24,6 +29,9 @@ export default function Home({ trending }) {
         <meta name="language" content="English" />
         <meta name="revisit-after" content="1 days" />
         <meta name="author" content="TeNyain Moe Lwin" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/7.4.1/swiper-bundle.css"
+          integrity="sha512-PYSQaQBKTu066xiq+XES4zNfKps3Za9xFsPH97MuEaP53a4kNFed/Q7lW539jALMETHApKj7/CZ1ac9d0NBzZA=="
+          crossOrigin="anonymous" referrerpolicy="no-referrer" />
 
         {/* <!-- Primary Meta Tags --> */}
         <meta name="title" content="CINE | Live cinematic information" />
