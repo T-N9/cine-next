@@ -15,8 +15,8 @@
     }
 
     @include m-breakpoint-down(large) {
-        background-position: center center;
-        background-size: cover;
+        background-position: top right;
+        background-size: 80%;
         background-attachment: scroll;
     }
 
@@ -31,15 +31,17 @@
         height: 100%;
 
         @include m-breakpoint-down(small) {
-            background: linear-gradient(90deg, rgba($clr-black, 0.8) 20%, rgba($clr-black, 0.8) 66.08%, rgba($clr-black, 0.5) 100%);
+            backdrop-filter: blur(0);
+            // background: linear-gradient(90deg, rgba($clr-black, 0.8) 20%, rgba($clr-black, 0.8) 66.08%, rgba($clr-black, 0.5) 100%);
         }
 
         .flex_section{
             display: flex;
 
             @include m-breakpoint-down(small) {
+                margin-top: 2rem;
                 flex-direction: column;
-                align-items: center;
+                align-items: flex-start;
             }
             .detail_poster {
                 position: relative;
@@ -54,10 +56,10 @@
                 }
 
             @include m-breakpoint-down(small) {
-                min-width: calUni(200px);
-                min-height: calc(300px);
-                width: calUni(200px);
-                height: calUni(300px);
+                min-width: calUni(150px);
+                min-height: calc(225px);
+                width: calUni(150px);
+                height: calUni(225px);
             }
             }
 
