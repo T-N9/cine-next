@@ -1,5 +1,4 @@
 // import { useState } from "react";
-import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
 import { InsertPhoto } from '@mui/icons-material';
@@ -87,27 +86,6 @@ const DetailHero = ({ data }) => {
 
     return (
         <>
-            <Head>
-                <title>{title}</title>
-                <meta name="title" content={title} />
-                <meta name="description"
-                    content={overview} />
-                {/* <!-- Open Graph / Facebook --> */}
-                <meta property="og:type" content="website" />
-                <meta property="og:url" content={`https://cine-next.vercel.app/movies/${data.id}`} />
-                <meta property="og:title" content={title} />
-                <meta property="og:description"
-                    content={overview} />
-                <meta property="og:image" content={backdrop_path} />
-
-                {/* <!-- Twitter --> */}
-                <meta property="twitter:card" content="summary_large_image" />
-                <meta property="twitter:url" content={`https://cine-next.vercel.app/movies/${data.id}` }/>
-                <meta property="twitter:title" content={title} />
-                <meta property="twitter:description"
-                    content={overview} />
-                <meta property="twitter:image" content={backdrop_path} />
-            </Head>
             <section
                 className={styles.detail_hero}
                 style={{ backgroundImage: `url(${backdrop_path})` }}
