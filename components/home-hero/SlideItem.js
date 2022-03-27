@@ -23,9 +23,11 @@ const SlideItem = (props) => {
                     </p>
 
                     <Link href={`/${route_type}/${id}`}>
-                        <Button variant='contained' className={styles.button}>
-                            View Detail
-                        </Button>
+                        <a href={`/${route_type}/${id}`}>
+                            <Button variant='contained' className={styles.button}>
+                                View Detail
+                            </Button>
+                        </a>
                     </Link>
                 </div>
             </div>
