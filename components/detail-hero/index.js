@@ -94,7 +94,7 @@ const DetailHero = ({ data }) => {
                     content={overview} />
                 {/* <!-- Open Graph / Facebook --> */}
                 <meta property="og:type" content="website" />
-                <meta property="og:url" content="https://ci-ne-next.vercel.app/" />
+                <meta property="og:url" content={`https://cine-next.vercel.app/movies/${data.id}`} />
                 <meta property="og:title" content={title} />
                 <meta property="og:description"
                     content={overview} />
@@ -102,7 +102,7 @@ const DetailHero = ({ data }) => {
 
                 {/* <!-- Twitter --> */}
                 <meta property="twitter:card" content="summary_large_image" />
-                <meta property="twitter:url" content="https://ci-ne-next.vercel.app/" />
+                <meta property="twitter:url" content={`https://cine-next.vercel.app/movies/${data.id}` }/>
                 <meta property="twitter:title" content={title} />
                 <meta property="twitter:description"
                     content={overview} />

@@ -15,7 +15,6 @@ class MyDocument extends Document {
                     <meta name="keywords"
                         content="cine, cinema, cinematic, information, movies, series, tv shows, tv, shows, torrents, tmdb, yts, download movies" />
                     <meta name="robots" content="index, follow" />
-                    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
                     <meta name="language" content="English" />
                     <meta name="revisit-after" content="1 days" />
                     <meta name="author" content="TeNyain Moe Lwin" />
@@ -30,7 +29,7 @@ class MyDocument extends Document {
 
                     {/* <!-- Open Graph / Facebook --> */}
                     <meta property="og:type" content="website" />
-                    <meta property="og:url" content="https://ci-ne.vercel.app/" />
+                    <meta property="og:url" content="https://cine-next.vercel.app/" />
                     <meta property="og:title" content="CINE | Live cinematic information" />
                     <meta property="og:description"
                         content="A website that provides you cinematic data with stunning UI. Torrents for movies are also available and just a touch to download them." />
@@ -38,7 +37,7 @@ class MyDocument extends Document {
 
                     {/* <!-- Twitter --> */}
                     <meta property="twitter:card" content="summary_large_image" />
-                    <meta property="twitter:url" content="https://ci-ne.vercel.app/" />
+                    <meta property="twitter:url" content="https://cine-next.vercel.app/" />
                     <meta property="twitter:title" content="CINE | Live cinematic information" />
                     <meta property="twitter:description"
                         content="A website that provides you cinematic data with stunning UI. Torrents for movies are also available and just a touch to download them." />
