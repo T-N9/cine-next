@@ -1,8 +1,9 @@
 // import { useState } from "react";
 import Image from 'next/image';
 import Link from 'next/link';
-import { InsertPhoto } from '@mui/icons-material';
+import { InsertPhoto , AccessTimeSharp, StarRateRounded, People } from '@mui/icons-material';
 import styles from './DetailHero.module.scss';
+import Button from '@mui/material/Button';
 
 const DetailHero = ({ data }) => {
 
@@ -17,9 +18,7 @@ const DetailHero = ({ data }) => {
     const overview = data.overview;
 
     let release_year;
-    release_date !== "" ?
-        release_year = release_date ? release_date.substring(0, 4) : first_air_date.substring(0, 4) :
-        release_year = "Unknown"
+    
 
     /* =====================================
         Content Rating
@@ -83,6 +82,40 @@ const DetailHero = ({ data }) => {
         )
     });
 
+    /* =====================================
+        Runtime, status, no_rate
+    ===================================== */
+
+    let runtime = data.runtime;
+    let status = data.status;
+
+    let no_rate;
+    if (backdrop_path !== undefined && poster_path !== undefined) {
+        release_date !== "" ?
+        release_year = release_date ? release_date.substring(0, 4) : first_air_date.substring(0, 4) :
+        release_year = "Unknown"
+
+        function timeConvert(n) {
+            var num = n;
+            var hours = (num / 60);
+            var rhours = Math.floor(hours);
+            var minutes = (hours - rhours) * 60;
+            var rminutes = Math.round(minutes);
+            return rhours + "h " + rminutes + "m";
+        }
+
+        no_rate = "NR";
+
+        runtime = runtime ? timeConvert(runtime) : `Unavailable`;
+    }
+
+    const tagline = data.tagline;
+    const rating = data.vote_average;
+    const popularity = data.popularity;
+
+    const handleTrailer = () => {
+        console.log('Trailer')
+    }
 
     return (
         <>
@@ -132,7 +165,56 @@ const DetailHero = ({ data }) => {
                                             }
                                             )}
                                     </p>
+                                    {
+                                        (runtime !== 'm' && runtime !== 'undefinedm') &&
+                                        <p className={styles.runtime}>
+                                            <AccessTimeSharp />
+                                            {runtime}
+                                        </p>
+                                    }
+                                    {
+                                        status === "In Production" &&
+                                        <p className={styles.coming_soon}>
+                                            Coming Soon
+                                        </p>
+                                    }
                                 </div>
+                                {
+                                    tagline &&
+                                    <div className={styles.tagline}>
+                                        <p>
+                                            " {tagline} "
+                                        </p>
+                                    </div>
+                                }
+                                <div className={styles.overview}>
+                                    <h1>Overview</h1>
+                                    <p>
+                                        {overview}
+                                    </p>
+                                </div>
+                                <div className={styles.info}>
+                                    <div>
+                                        <span className={styles.icon}>
+                                            <StarRateRounded />
+                                        </span>
+                                        <h1>
+                                            {rating === 0 ? no_rate : rating}
+                                        </h1>
+                                    </div>
+
+                                    <div>
+                                        <span className={styles.icon}>
+                                            <People />
+                                        </span>
+                                        <h1>
+                                            {popularity}
+                                        </h1>
+                                    </div>
+                                </div>
+                                <Button onClick={handleTrailer} variant='outlined' className={styles.trailer_btn}>
+                                    View Trailer
+                                </Button>
                             </div>
                         </div>
                     </div>
