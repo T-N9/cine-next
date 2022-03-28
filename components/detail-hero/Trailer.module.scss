@@ -1,0 +1,63 @@
+@import '../../styles/mixins';
+@import '../../styles/variables';
+@import '../../styles/utilities';
+
+.detail_trailer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba($clr-black, 0.8);
+    backdrop-filter: grayscale(1);
+    z-index: 5000;
+    transition: all 200ms ease;
+    
+    @include flex-center;
+    flex-direction: column;
+
+    .wrapper {
+        width: 50%;
+        height: 80%;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+
+        @include m-breakpoint-down(large) {
+            width: 80%;
+            height: 45%;
+        }
+
+        @include m-breakpoint-down(small) {
+            width: 90%;
+            height: 35%;
+        }
+    }
+
+    .not_av {
+        width: 100%;
+        height: 100%;
+        @include flex-center;
+        border: 2px solid $clr-primary;
+        border-radius: 5px;
+        
+        background-color: $clr-black;
+        h1 {
+            color: $clr-danger !important;
+        }
+    }
+
+    .detail_video {
+        width: 100%;
+        height: 100%;
+        background-color: $clr-black;
+        border: 2px solid $clr-primary;
+        border-radius: 5px;
+    }
+
+    .cancel {
+        color: $clr-danger;
+        background-color: transparent;
+        margin-bottom: 0.5rem;
+    }
+}

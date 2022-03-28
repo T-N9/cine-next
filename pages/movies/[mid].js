@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 // import { useRouter } from 'next/router';
 import Head from 'next/head';
 import { useDispatch } from 'react-redux';
-import { makeLogoSmall } from '../../redux/navActiveSlice'
+import { makeLogoSmall , activeNavItem } from '../../redux/navActiveSlice'
 import { DetailHero } from '../../components';
 
 const MoviePage = ({movie, casts}) => {
@@ -14,7 +14,8 @@ const MoviePage = ({movie, casts}) => {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        dispatch(makeLogoSmall())
+        dispatch(makeLogoSmall());
+        dispatch(activeNavItem("movies"));
     }, [dispatch])
 
     

@@ -1,12 +1,15 @@
-// import { useState } from "react";
+import { useState } from "react";
 import Image from 'next/image';
 import Link from 'next/link';
 import { InsertPhoto , AccessTimeSharp, StarRateRounded, People } from '@mui/icons-material';
 import styles from './DetailHero.module.scss';
 import Torrent from './Torrent';
 import Button from '@mui/material/Button';
+import Trailer from './Trailer';
 
 const DetailHero = ({ data }) => {
+
+    const [showTrailer, setShowTrailer] = useState(false);
 
     /* =====================================
         Title, background, poster, release year, overview
@@ -110,13 +113,48 @@ const DetailHero = ({ data }) => {
         runtime = runtime ? timeConvert(runtime) : `Unavailable`;
     }
 
+    /* =====================================
+        Tagline, rating, popularity, imdb_id
+    ===================================== */
     const tagline = data.tagline;
     const rating = data.vote_average;
     const popularity = data.popularity;
     const imdb_id = data.imdb_id;
 
+    /* =====================================
+        Trailer
+    ===================================== */
+
+    let trailer,trailer_official;
+        if (data.videos.results.length > 0) {
+            trailer_official = data.videos.results.filter(item => {
+                return (item.type === 'Trailer' && item.official === true)
+            });
+
+            if (trailer_official.length === 0) {
+                trailer_official = data.videos.results.filter(item => {
+                    if (item.type === 'Trailer') {
+                        return (item.type === 'Trailer')
+                    }
+                    else {
+                        return (item);
+                    }
+
+                });
+            }
+
+            if (trailer_official[0]) {
+                trailer = trailer_official[0].key;
+            } else {
+                trailer = null;
+            }
+
+        } else {
+            trailer = null;
+        }
+
     const handleTrailer = () => {
-        console.log('Trailer')
+        setShowTrailer(prev => !prev);
     }
 
     return (
@@ -233,7 +271,11 @@ const DetailHero = ({ data }) => {
                         </div>
                     </div>
                 </div>
-
+                <Trailer
+                    trailer={trailer}
+                    showTrailer={showTrailer}
+                    handleTrailer={handleTrailer}
+                />
             </section>
         </>
     )

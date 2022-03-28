@@ -32,7 +32,7 @@
 
         @include m-breakpoint-down(small) {
             backdrop-filter: blur(0);
-            // background: linear-gradient(90deg, rgba($clr-black, 0.8) 20%, rgba($clr-black, 0.8) 66.08%, rgba($clr-black, 0.5) 100%);
+            background: linear-gradient(90deg, rgba($clr-black, 1) 20%, rgba($clr-black, 0.5) 66.08%, rgba($clr-black, 0.2) 100%);
         }
 
         .flex_section{
@@ -89,19 +89,28 @@
                     flex-wrap: wrap;
                 }
 
+                @include m-breakpoint-down(small){
+                    margin-bottom: 1rem;
+                }
+
                 .year {
                     margin-left: 15px;
                     font-weight: normal;
-                    font-size: $fs-26;
+                    font-size: $fs-22;
 
-                    @include m-breakpoint-down(large) {
+                    @include m-breakpoint-up(large) {
                         // margin-left: 0;
+                        font-size: $fs-26;
                     }
                 }
             }
 
             .title {
                 font-size: $fs-32;
+
+                @include m-breakpoint-down(small){
+                    font-size: $fs-26;
+                }
             }
 
             .content_rating {
@@ -113,6 +122,12 @@
                 p {
                     margin: 0 !important;
                 }
+
+                @include m-breakpoint-down(small){
+                    p {
+                        font-size: 14px;
+                    }
+                }
             }
 
             .genres {
@@ -121,7 +136,7 @@
 
                 > * {
                     @include m-breakpoint-down(small) {
-                        margin-top: 1rem;
+                        // margin-top: 1rem;
                     }
                 }
 
@@ -133,7 +148,7 @@
                     cursor: pointer;
 
                     @include m-breakpoint-down(small) {
-                        margin-top: 5px;
+                        margin-bottom: 5px;
                     }
 
                 }
@@ -149,9 +164,17 @@
                 align-items: center;
                 margin-bottom: 2rem;
 
+                @include m-breakpoint-down(small){
+                    justify-content: space-between;
+                }
+
                 > p {
                     margin-bottom: 0;
                     margin-left: 20px;
+
+                    @include m-breakpoint-down(small){
+                        margin-left: 0
+                    }
                 }
 
                 .runtime {
