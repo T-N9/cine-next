@@ -10,7 +10,7 @@ const SeriesPage = ({ id, series }) => {
     const media_type = 'tv';
 
     const title = series.original_title;
-    const backdrop_path = `https://www.themoviedb.org/t/p/original/${series.backdrop_path}`;
+    const backdrop_path = `https://www.themoviedb.org/t/p/w780/${series.backdrop_path}`;
     const overview = series.overview;
 
     const dispatch = useDispatch();

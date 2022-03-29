@@ -10,7 +10,7 @@ const MoviePage = ({ id, movie }) => {
     const media_type = 'movie';
 
     const title = movie.original_title;
-    const backdrop_path = `https://www.themoviedb.org/t/p/original/${movie.backdrop_path}`;
+    const backdrop_path = `https://www.themoviedb.org/t/p/w780/${movie.backdrop_path}`;
     const overview = movie.overview;
 
     const dispatch = useDispatch();
