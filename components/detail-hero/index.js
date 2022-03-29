@@ -15,7 +15,15 @@ const DetailHero = ({ id, media_type }) => {
 
     const [showTrailer, setShowTrailer] = useState(false);
     const [getData, setGetData] = useState(null);
-    const { data, error } = useSWR(`https://api.themoviedb.org/3/${media_type}/${id}?api_key=68d49bbc8d40fff0d6cafaa7bfd48072&append_to_response=videos,releases`, fetcher);
+
+    let urlLink;
+    if (media_type === 'movie') {
+        urlLink = `https://api.themoviedb.org/3/movie/${id}?api_key=68d49bbc8d40fff0d6cafaa7bfd48072&append_to_response=videos,releases`;
+    } else {
+        urlLink = `https://api.themoviedb.org/3/tv/${id}?api_key=68d49bbc8d40fff0d6cafaa7bfd48072&append_to_response=videos,releases,content_ratings`;
+    }
+
+    const { data, error } = useSWR(urlLink, fetcher);
 
     useEffect(() => {
         if(data){
@@ -37,7 +45,7 @@ const DetailHero = ({ id, media_type }) => {
         /* =====================================
         Title, background, poster, release year, overview
         ===================================== */
-        title = getData.original_title;
+        title = getData.name ? getData.name : getData.original_title;
         backdrop_path = `https://www.themoviedb.org/t/p/w342/${getData.backdrop_path}`;
         poster_path = `https://www.themoviedb.org/t/p/w342/${getData.poster_path}`;
         release_date = getData.release_date;
@@ -46,6 +54,14 @@ const DetailHero = ({ id, media_type }) => {
         /* =====================================
         Content Rating
         ===================================== */
+        const findOtherRatings_tv = () => {
+            let getRating = getData.content_ratings.results;
+            let i = 1;
+            do {
+                content_rating = getRating[getRating.length - i].rating;
+                i++;
+            } while (content_rating === '');
+        }
 
         const findOtherRatings_movie = () => {
             let getRating = getData.releases.countries;
@@ -60,39 +76,60 @@ const DetailHero = ({ id, media_type }) => {
             }
         }
 
-        function checkMovieRating() {
-            let rating_arr = [];
-
-            content_rating_US = getData.releases.countries.filter(item => {
-                return (item.iso_3166_1 === "US")
-            });
-
-            content_rating_US.map(item => rating_arr.push(item.certification));
-
-            let check = (list) => list.every(item => list.indexOf(item) === 0);
-
-            if (content_rating_US.length === 0) {
-                findOtherRatings_movie();
-            } else {
-                if (content_rating_US.length === 1) {
-                    content_rating = content_rating_US[0].certification;
+        if (media_type === 'movie') {
+            function checkMovieRating() {
+                let rating_arr = [];
+    
+                content_rating_US = getData.releases.countries.filter(item => {
+                    return (item.iso_3166_1 === "US")
+                });
+    
+                content_rating_US.map(item => rating_arr.push(item.certification));
+    
+                let check = (list) => list.every(item => list.indexOf(item) === 0);
+    
+                if (content_rating_US.length === 0) {
+                    findOtherRatings_movie();
                 } else {
-
-                    if (check(rating_arr) && rating_arr[0] === '') {
-                        content_rating = '';
+                    if (content_rating_US.length === 1) {
+                        content_rating = content_rating_US[0].certification;
                     } else {
-                        let i = 1;
-                        do {
-                            content_rating = content_rating_US[content_rating_US.length - i].certification;
-                            i++;
-                        } while (content_rating === '');
+    
+                        if (check(rating_arr) && rating_arr[0] === '') {
+                            content_rating = '';
+                        } else {
+                            let i = 1;
+                            do {
+                                content_rating = content_rating_US[content_rating_US.length - i].certification;
+                                i++;
+                            } while (content_rating === '');
+                        }
                     }
                 }
             }
+            getData.releases.countries !== [] ?
+                checkMovieRating() :
+                content_rating = '';
+        }else{
+            if (getData.content_ratings.results.length > 0) {
+                content_rating_US = getData.content_ratings.results.filter(item => {
+                    return (item.iso_3166_1 === 'US')
+                });
+
+                if (content_rating_US.length === 0) {
+                    findOtherRatings_tv();
+                } else {
+                    let i = 1;
+                    do {
+                        content_rating = content_rating_US[content_rating_US.length - i].rating;
+                        i++;
+                    } while (content_rating === '');
+                }
+
+            } else {
+                content_rating = '';
+            }
         }
-        getData.releases.countries !== [] ?
-            checkMovieRating() :
-            content_rating = '';
 
         /* =====================================
         Genres
@@ -107,9 +144,12 @@ const DetailHero = ({ id, media_type }) => {
         /* =====================================
         Runtime, status, no_rate
         ===================================== */
+        let first_air_date, episode_run_time;
 
         runtime = getData.runtime;
         status = getData.status;
+        first_air_date = getData.first_air_date;
+        episode_run_time = getData.episode_run_time;
 
         if (backdrop_path !== undefined && poster_path !== undefined) {
             release_date !== "" ?
@@ -127,7 +167,7 @@ const DetailHero = ({ id, media_type }) => {
 
             no_rate = "NR";
 
-            runtime = runtime ? timeConvert(runtime) : `Unavailable`;
+            runtime = runtime ? timeConvert(runtime) : `${episode_run_time}m`;
         }
 
         /* =====================================
@@ -285,7 +325,7 @@ const DetailHero = ({ id, media_type }) => {
                                 </Button>
 
                                 {
-                                    (title && release_year) &&
+                                    ((title && release_year) && media_type === 'movie') &&
                                     (
 
                                         <Torrent

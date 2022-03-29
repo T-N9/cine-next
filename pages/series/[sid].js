@@ -5,19 +5,19 @@ import { useDispatch } from 'react-redux';
 import { makeLogoSmall , activeNavItem } from '../../redux/navActiveSlice'
 import { DetailCredit, DetailHero, DetailImages, DetailVideos, DetailInfo, DetailRecommend } from '../../components';
 
-const MoviePage = ({ id, movie }) => {
+const SeriesPage = ({ id, series }) => {
 
-    const media_type = 'movie';
+    const media_type = 'tv';
 
-    const title = movie.original_title;
-    const backdrop_path = `https://www.themoviedb.org/t/p/original/${movie.backdrop_path}`;
-    const overview = movie.overview;
+    const title = series.original_title;
+    const backdrop_path = `https://www.themoviedb.org/t/p/original/${series.backdrop_path}`;
+    const overview = series.overview;
 
     const dispatch = useDispatch();
 
     useEffect(() => {
         dispatch(makeLogoSmall());
-        dispatch(activeNavItem("movies"));
+        dispatch(activeNavItem("series"));
     }, [dispatch]);
 
     return (
@@ -29,7 +29,7 @@ const MoviePage = ({ id, movie }) => {
                     content={overview} />
                 {/* <!-- Open Graph / Facebook --> */}
                 <meta property="og:type" content="website" />
-                <meta property="og:url" content={`https://cine-next.vercel.app/movies/${movie.id}`} />
+                <meta property="og:url" content={`https://cine-next.vercel.app/movies/${series.id}`} />
                 <meta property="og:title" content={title} />
                 <meta property="og:description"
                     content={overview} />
@@ -37,7 +37,7 @@ const MoviePage = ({ id, movie }) => {
 
                 {/* <!-- Twitter --> */}
                 <meta property="twitter:card" content="summary_large_image" />
-                <meta property="twitter:url" content={`https://cine-next.vercel.app/movies/${movie.id}` }/>
+                <meta property="twitter:url" content={`https://cine-next.vercel.app/movies/${series.id}` }/>
                 <meta property="twitter:title" content={title} />
                 <meta property="twitter:description"
                     content={overview} />
@@ -69,26 +69,26 @@ const MoviePage = ({ id, movie }) => {
             </div>
             <DetailRecommend
                 id = {id}
-                route_type='movie'
+                route_type='tv'
                 media_type={media_type}
             />
         </>
     )
 }
 
-export default MoviePage;
+export default SeriesPage;
 
 export async function getServerSideProps(context) {
 
-    const { mid } = context.params;
+    const { sid } = context.params;
 
-    const getMovie = await fetch(`https://api.themoviedb.org/3/movie/${mid}?api_key=68d49bbc8d40fff0d6cafaa7bfd48072`).then(res => res.json()).then(data => data);
+    const getSeries = await fetch(`https://api.themoviedb.org/3/tv/${sid}?api_key=68d49bbc8d40fff0d6cafaa7bfd48072&append_to_response=videos,releases,content_ratings`).then(res => res.json()).then(data => data);
 
 
     return {
       props: {
-        id : mid,
-        movie : getMovie
+        id : sid,
+        series : getSeries
       }, // will be passed to the page component as props
     }
   }

@@ -1080,28 +1080,34 @@ const DetailInfo = ({ id, media_type }) => {
                             </p>
                         </div>
 
-                        <div className={styles.state_wrapper}>
-                            <p className={styles.name}>
-                                Budget
-                            </p>
-                            <p className={styles.current}>
-                                {
-                                    budget ? budget : '-'
-                                }
-                            </p>
-                        </div>
+                        {
+                            media_type === 'movie' &&
+                            <div className={styles.state_wrapper}>
+                                <p className={styles.name}>
+                                    Budget
+                                </p>
+                                <p className={styles.current}>
+                                    {
+                                        budget ? budget : '-'
+                                    }
+                                </p>
+                            </div>
+                        }
 
-                        <div className={styles.state_wrapper}>
-                            <p className={styles.name}>
-                                Revenue
-                            </p>
-                            <p className={styles.current}>
-                                {
-                                    revenue ? revenue : '-'
+                        {
+                            media_type === 'movie' &&
+                            <div className={styles.state_wrapper}>
+                                <p className={styles.name}>
+                                    Revenue
+                                </p>
+                                <p className={styles.current}>
+                                    {
+                                        revenue ? revenue : '-'
 
-                                }
-                            </p>
-                        </div>
+                                    }
+                                </p>
+                            </div>
+                        }
 
                         <div className={styles.state_wrapper}>
                             <p className={styles.name}>
