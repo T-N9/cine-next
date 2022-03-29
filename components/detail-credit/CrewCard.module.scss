@@ -1,0 +1,44 @@
+@import '../../styles/mixins';
+@import '../../styles/variables';
+@import '../../styles/utilities';
+
+.crew_card_wrapper {
+    display: flex;
+    align-items: center;
+    background-color: $clr-wah;
+    margin-right: 10px;
+    max-width: calUni(250px);
+    border-radius: 5px;
+    overflow: hidden;
+    user-select: none;
+    box-shadow: rgba($clr-light, 0.25) 0px 2px 5px -1px, rgba( $clr-light, 0.3) 0px 1px 3px -1px;
+
+    .crew_img {
+        width: 60px;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .person {
+        @include flex-center;
+        color: $clr-primary;
+        width: 60px;
+        height: 75px;
+    }
+
+    .content {
+        padding: 10px;
+
+        p {
+            font-size: 14px;
+            margin-bottom: 0;
+        }
+    }
+
+    h1 {
+        font-size: 16px;
+        color: $clr-black;
+        margin-bottom: 5px;
+    }
+
+}

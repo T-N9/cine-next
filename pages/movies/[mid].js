@@ -1,11 +1,14 @@
 import { useEffect } from 'react';
 // import { useRouter } from 'next/router';
+import styles from '../Pages.module.scss';
 import Head from 'next/head';
 import { useDispatch } from 'react-redux';
 import { makeLogoSmall , activeNavItem } from '../../redux/navActiveSlice'
-import { DetailHero } from '../../components';
+import { DetailCredit, DetailHero, DetailImages, DetailVideos, DetailInfo } from '../../components';
 
-const MoviePage = ({movie, casts}) => {
+const MoviePage = ({movie, casts, images, videos}) => {
+
+    // console.log(casts)
 
     const title = movie.original_title;
     const backdrop_path = `https://www.themoviedb.org/t/p/w342/${movie.backdrop_path}`;
@@ -50,6 +53,22 @@ const MoviePage = ({movie, casts}) => {
             <DetailHero
                 data = {movie}
             />
+            <DetailCredit
+                data = {casts}
+            />
+            <div className={`${styles.flex_media} ${styles.container_x_md} ${styles.container_y_2}`}>
+                <div className={styles.media_wrapper}>
+                    <DetailImages
+                        data={images}
+                    />
+                    <DetailVideos
+                        data={videos}
+                    />
+                </div>
+                <DetailInfo
+                    data={movie}
+                />
+            </div>
         </>
     )
 }
@@ -60,15 +79,21 @@ export async function getServerSideProps(context) {
 
     const { mid } = context.params;
 
-    const getMovie = await fetch(`https://api.themoviedb.org/3/movie/${mid}?api_key=68d49bbc8d40fff0d6cafaa7bfd48072&append_to_response=videos,releases`).then(res => res.json()).then(data => data);
+    const getMovie = await fetch(`https://api.themoviedb.org/3/movie/${mid}?api_key=68d49bbc8d40fff0d6cafaa7bfd48072&append_to_response=videos,releases,external_ids,keywords`).then(res => res.json()).then(data => data);
 
     const getCasts = await fetch(`https://api.themoviedb.org/3/movie/${mid}/credits?api_key=68d49bbc8d40fff0d6cafaa7bfd48072&language=en-US`).then(res => res.json()).then(data => data);
+
+    const getImages = await fetch(`https://api.themoviedb.org/3/movie/${mid}/images?api_key=68d49bbc8d40fff0d6cafaa7bfd48072`).then(res => res.json()).then(data => data);
+
+    const getVideos = await fetch(`https://api.themoviedb.org/3/movie/${mid}/videos?api_key=68d49bbc8d40fff0d6cafaa7bfd48072`).then(res => res.json()).then(data => data);
 
 
     return {
       props: {
           movie : getMovie,
-          casts : getCasts
+          casts : getCasts,
+          images : getImages,
+          videos : getVideos
       }, // will be passed to the page component as props
     }
   }

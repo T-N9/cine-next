@@ -1,0 +1,59 @@
+@import '../../styles/mixins';
+@import '../../styles/variables';
+@import '../../styles/utilities';
+
+
+.detail_casts {
+    margin-top: calUni(-120px);
+
+    .view_credits {
+        background-color: $clr-black;
+        border-radius: 5px;
+        border:  1px solid $clr-light;
+        @include flex-center;
+        color: $clr-wah;
+        min-height: calUni(280px);
+        flex-direction: column;
+        text-align: center;
+
+        @include m-breakpoint-down(small) {
+            width: calUni(110px);
+            min-height: calUni(250px);
+        }
+    }
+}
+
+.detail_crews {
+    .view_credits {
+        height: 100%;
+        background-color: $clr-black;
+        border-radius: 5px;
+        border:  1px solid $clr-light;
+        @include flex-center;
+        color: $clr-wah;
+        min-height: calUni(76px);
+
+        p {
+            margin: 0;
+            margin-right: 15px;
+        }
+    }
+}
+
+
+
+.crews_box {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.title_2 {
+    color: $clr-wah;
+    position: relative;
+}
+
+.loading_error {
+    height: 100%;
+    min-height: 200px;
+    @include flex-center;
+}

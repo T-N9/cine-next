@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import Head from "next/head"
 import { useDispatch } from 'react-redux'
-import { makeLogoBig } from '../redux/navActiveSlice'
+import { makeLogoBig, activeNavItem } from '../redux/navActiveSlice'
 import { HomeHero } from "../components"
 
 export default function Home({ trending }) {
@@ -10,6 +10,7 @@ export default function Home({ trending }) {
 
   useEffect(() => {
     dispatch(makeLogoBig())
+    dispatch(activeNavItem('home'))
   }, [dispatch])
 
   return (
@@ -61,7 +62,7 @@ export default function Home({ trending }) {
 
 export async function getStaticProps(context) {
 
-  const getTrending = await fetch(`https://api.themoviedb.org/3/trending/all/day?api_key=68d49bbc8d40fff0d6cafaa7bfd48072`).then(res => res.json()).then(data => data.results);
+  const getTrending = await fetch(`https://api.themoviedb.org/3/trending/all/day?api_key=68d49bbc8d40fff0d6cafaa7bfd48072`).then(res => res.json()).then(data => data.results).catch((err) => 'Error loading');
 
   return {
     props: {

@@ -1,0 +1,33 @@
+@import '../../styles/mixins';
+@import '../../styles/variables';
+@import '../../styles/utilities';
+
+.videos_list {
+    display: flex;
+    width: 100%;
+    overflow-y: auto;
+    border-radius: 10px;
+    background-color: $clr-black;
+    >:not(:last-child) {
+        margin-right: 5px;
+    }
+
+    .media_video {
+        width: 300px;
+        height: 250px;
+    }
+
+    .view_more {
+        border: 1px solid $clr-light;
+        background-color: $clr-black;
+        min-width: 200px;
+        height: 250px;
+        color: $clr-wah;
+        @include flex-center;
+
+        p {
+            margin: 0;
+            margin-right: 10px;
+        }
+    }
+}
