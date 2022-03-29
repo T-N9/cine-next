@@ -4,9 +4,9 @@ import styles from '../Pages.module.scss';
 import Head from 'next/head';
 import { useDispatch } from 'react-redux';
 import { makeLogoSmall , activeNavItem } from '../../redux/navActiveSlice'
-import { DetailCredit, DetailHero, DetailImages, DetailVideos, DetailInfo } from '../../components';
+import { DetailCredit, DetailHero, DetailImages, DetailVideos, DetailInfo, DetailRecommend } from '../../components';
 
-const MoviePage = ({movie, casts, images, videos}) => {
+const MoviePage = ({movie, casts, images, videos, recommend}) => {
 
     // console.log(casts)
 
@@ -69,6 +69,10 @@ const MoviePage = ({movie, casts, images, videos}) => {
                     data={movie}
                 />
             </div>
+            <DetailRecommend
+                data = {recommend}
+                route_type='movie'
+            />
         </>
     )
 }
@@ -87,13 +91,16 @@ export async function getServerSideProps(context) {
 
     const getVideos = await fetch(`https://api.themoviedb.org/3/movie/${mid}/videos?api_key=68d49bbc8d40fff0d6cafaa7bfd48072`).then(res => res.json()).then(data => data);
 
+    const getRecommend = await fetch(`https://api.themoviedb.org/3/movie/${mid}/recommendations?api_key=68d49bbc8d40fff0d6cafaa7bfd48072&language=en-US`).then(res => res.json()).then(data => data);
+
 
     return {
       props: {
           movie : getMovie,
           casts : getCasts,
           images : getImages,
-          videos : getVideos
+          videos : getVideos,
+          recommend : getRecommend
       }, // will be passed to the page component as props
     }
   }
