@@ -1,14 +1,13 @@
 import { useEffect } from 'react';
-// import { useRouter } from 'next/router';
 import styles from '../Pages.module.scss';
 import Head from 'next/head';
 import { useDispatch } from 'react-redux';
 import { makeLogoSmall , activeNavItem } from '../../redux/navActiveSlice'
 import { DetailCredit, DetailHero, DetailImages, DetailVideos, DetailInfo, DetailRecommend } from '../../components';
 
-const MoviePage = ({movie, casts, images, videos, recommend}) => {
+const MoviePage = ({ id, movie }) => {
 
-    // console.log(casts)
+    const media_type = 'movie';
 
     const title = movie.original_title;
     const backdrop_path = `https://www.themoviedb.org/t/p/w342/${movie.backdrop_path}`;
@@ -19,13 +18,7 @@ const MoviePage = ({movie, casts, images, videos, recommend}) => {
     useEffect(() => {
         dispatch(makeLogoSmall());
         dispatch(activeNavItem("movies"));
-    }, [dispatch])
-
-    
-
-    // const router = useRouter();
-    // const { mid } = router.query;
-    // console.log(movie, casts);
+    }, [dispatch]);
 
     return (
         <>
@@ -51,27 +44,33 @@ const MoviePage = ({movie, casts, images, videos, recommend}) => {
                 <meta property="twitter:image" content={backdrop_path} />
             </Head>
             <DetailHero
-                data = {movie}
+                id = {id}
+                media_type={media_type}
             />
             <DetailCredit
-                data = {casts}
+                id = {id}
+                media_type={media_type}
             />
             <div className={`${styles.flex_media} ${styles.container_x_md} ${styles.container_y_2}`}>
                 <div className={styles.media_wrapper}>
                     <DetailImages
-                        data={images}
+                        id = {id}
+                        media_type={media_type}
                     />
                     <DetailVideos
-                        data={videos}
+                        id = {id}
+                        media_type={media_type}
                     />
                 </div>
                 <DetailInfo
-                    data={movie}
+                    id = {id}
+                    media_type={media_type}
                 />
             </div>
             <DetailRecommend
-                data = {recommend}
+                id = {id}
                 route_type='movie'
+                media_type={media_type}
             />
         </>
     )
@@ -83,24 +82,13 @@ export async function getServerSideProps(context) {
 
     const { mid } = context.params;
 
-    const getMovie = await fetch(`https://api.themoviedb.org/3/movie/${mid}?api_key=68d49bbc8d40fff0d6cafaa7bfd48072&append_to_response=videos,releases,external_ids,keywords`).then(res => res.json()).then(data => data);
-
-    const getCasts = await fetch(`https://api.themoviedb.org/3/movie/${mid}/credits?api_key=68d49bbc8d40fff0d6cafaa7bfd48072&language=en-US`).then(res => res.json()).then(data => data);
-
-    const getImages = await fetch(`https://api.themoviedb.org/3/movie/${mid}/images?api_key=68d49bbc8d40fff0d6cafaa7bfd48072`).then(res => res.json()).then(data => data);
-
-    const getVideos = await fetch(`https://api.themoviedb.org/3/movie/${mid}/videos?api_key=68d49bbc8d40fff0d6cafaa7bfd48072`).then(res => res.json()).then(data => data);
-
-    const getRecommend = await fetch(`https://api.themoviedb.org/3/movie/${mid}/recommendations?api_key=68d49bbc8d40fff0d6cafaa7bfd48072&language=en-US`).then(res => res.json()).then(data => data);
+    const getMovie = await fetch(`https://api.themoviedb.org/3/movie/${mid}?api_key=68d49bbc8d40fff0d6cafaa7bfd48072`).then(res => res.json()).then(data => data);
 
 
     return {
       props: {
-          movie : getMovie,
-          casts : getCasts,
-          images : getImages,
-          videos : getVideos,
-          recommend : getRecommend
+        id : mid,
+        movie : getMovie
       }, // will be passed to the page component as props
     }
   }

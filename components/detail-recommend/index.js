@@ -1,15 +1,29 @@
+import { useState, useEffect } from 'react';
+import useSWR from 'swr';
 import styles from './DetailRecommend.module.scss';
+import { CircularProgress } from '@mui/material';
 import Link from 'next/link';
 
-const DetailRecommend = ({data, route_type}) => {
+const fetcher = (...args) => fetch(...args).then(res => res.json());
+
+const DetailRecommend = ({id, route_type,}) => {
+
+    const [ getData, setGetData ] = useState(null);
+    const { data, error } = useSWR(`https://api.themoviedb.org/3/${route_type}/${id}/recommendations?api_key=68d49bbc8d40fff0d6cafaa7bfd48072&language=en-US`, fetcher);
+
+    useEffect(()=> {
+        if(data) {
+            setGetData(data);
+        }
+    }, [data]);
 
     let recommend, recommendList;
 
-    if(data) {
-        if(data.results.length >= 10) {
-            recommend = data.results.slice(0,8);
+    if(getData !== null) {
+        if(getData.results.length >= 10) {
+            recommend = getData.results.slice(0,8);
         }else {
-            recommend = data.results;
+            recommend = getData.results;
         }
 
         recommendList = recommend.map(item => {
@@ -38,6 +52,17 @@ const DetailRecommend = ({data, route_type}) => {
             recommendList = null;
         }
     }
+
+    if (error) return (
+        <section className={styles.loading_error}>
+            <h1>⚠️ Error getting resources! ⚠️</h1>
+        </section>
+    )
+    if (!data) return (
+        <section className={styles.loading_error}>
+            <CircularProgress />
+        </section>
+    )
 
     return(
         <>

@@ -1,138 +1,156 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from 'next/image';
 import Link from 'next/link';
-import { InsertPhoto , AccessTimeSharp, StarRateRounded, People } from '@mui/icons-material';
+import useSWR from "swr";
+import { CircularProgress } from "@mui/material";
+import { InsertPhoto, AccessTimeSharp, StarRateRounded, People } from '@mui/icons-material';
 import styles from './DetailHero.module.scss';
 import Torrent from './Torrent';
 import Button from '@mui/material/Button';
 import Trailer from './Trailer';
 
-const DetailHero = ({ data }) => {
+const fetcher = (...args) => fetch(...args).then(res => res.json());
+
+const DetailHero = ({ id, media_type }) => {
 
     const [showTrailer, setShowTrailer] = useState(false);
+    const [getData, setGetData] = useState(null);
+    const { data, error } = useSWR(`https://api.themoviedb.org/3/${media_type}/${id}?api_key=68d49bbc8d40fff0d6cafaa7bfd48072&append_to_response=videos,releases`, fetcher);
 
-    /* =====================================
-        Title, background, poster, release year, overview
-    ===================================== */
-
-    const title = data.original_title;
-    const backdrop_path = `https://www.themoviedb.org/t/p/w342/${data.backdrop_path}`;
-    const poster_path = `https://www.themoviedb.org/t/p/w342/${data.poster_path}`;
-    const release_date = data.release_date;
-    const overview = data.overview;
-
-    let release_year;
-    
-
-    /* =====================================
-        Content Rating
-    ===================================== */
-    let content_rating, content_rating_US;
-
-    const findOtherRatings_movie = () => {
-        let getRating = data.releases.countries;
-        let i = 1;
-        if (data.releases.countries === []) {
-            do {
-                content_rating = getRating[getRating.length - i].certification;
-                i++;
-            } while (content_rating === '');
-        } else {
-            content_rating = '';
+    useEffect(() => {
+        if(data){
+            setGetData(data)
         }
-    }
+        
+    }, [data])
 
-    function checkMovieRating() {
-        let rating_arr = [];
+    let title, backdrop_path, poster_path, release_date, overview;
+    let release_year;
+    let content_rating, content_rating_US;
+    let genres = [];
+    let runtime, status, no_rate;
+    let tagline, rating, popularity, imdb_id;
+    let trailer, trailer_official;
 
-        content_rating_US = data.releases.countries.filter(item => {
-            return (item.iso_3166_1 === "US")
-        });
+    if (getData !== null) {
 
-        content_rating_US.map(item => rating_arr.push(item.certification));
+        /* =====================================
+        Title, background, poster, release year, overview
+        ===================================== */
+        title = getData.original_title;
+        backdrop_path = `https://www.themoviedb.org/t/p/w342/${getData.backdrop_path}`;
+        poster_path = `https://www.themoviedb.org/t/p/w342/${getData.poster_path}`;
+        release_date = getData.release_date;
+        overview = getData.overview;
 
-        let check = (list) => list.every(item => list.indexOf(item) === 0);
+        /* =====================================
+        Content Rating
+        ===================================== */
 
-        if (content_rating_US.length === 0) {
-            findOtherRatings_movie();
-        } else {
-            if (content_rating_US.length === 1) {
-                content_rating = content_rating_US[0].certification;
+        const findOtherRatings_movie = () => {
+            let getRating = getData.releases.countries;
+            let i = 1;
+            if (getData.releases.countries === []) {
+                do {
+                    content_rating = getRating[getRating.length - i].certification;
+                    i++;
+                } while (content_rating === '');
             } else {
+                content_rating = '';
+            }
+        }
 
-                if (check(rating_arr) && rating_arr[0] === '') {
-                    content_rating = '';
+        function checkMovieRating() {
+            let rating_arr = [];
+
+            content_rating_US = getData.releases.countries.filter(item => {
+                return (item.iso_3166_1 === "US")
+            });
+
+            content_rating_US.map(item => rating_arr.push(item.certification));
+
+            let check = (list) => list.every(item => list.indexOf(item) === 0);
+
+            if (content_rating_US.length === 0) {
+                findOtherRatings_movie();
+            } else {
+                if (content_rating_US.length === 1) {
+                    content_rating = content_rating_US[0].certification;
                 } else {
-                    let i = 1;
-                    do {
-                        content_rating = content_rating_US[content_rating_US.length - i].certification;
-                        i++;
-                    } while (content_rating === '');
+
+                    if (check(rating_arr) && rating_arr[0] === '') {
+                        content_rating = '';
+                    } else {
+                        let i = 1;
+                        do {
+                            content_rating = content_rating_US[content_rating_US.length - i].certification;
+                            i++;
+                        } while (content_rating === '');
+                    }
                 }
             }
         }
-    }
-    data.releases.countries !== [] ?
-        checkMovieRating() :
-        content_rating = '';
+        getData.releases.countries !== [] ?
+            checkMovieRating() :
+            content_rating = '';
 
-    /* =====================================
+        /* =====================================
         Genres
-    ===================================== */
-    let genres = [];
-    data.genres.map(item => {
-        return (
-            genres.push(item.name)
-        )
-    });
+        ===================================== */
 
-    /* =====================================
+        getData.genres.map(item => {
+            return (
+                genres.push(item.name)
+            )
+        });
+
+        /* =====================================
         Runtime, status, no_rate
-    ===================================== */
+        ===================================== */
 
-    let runtime = data.runtime;
-    let status = data.status;
+        runtime = getData.runtime;
+        status = getData.status;
 
-    let no_rate;
-    if (backdrop_path !== undefined && poster_path !== undefined) {
-        release_date !== "" ?
-        release_year = release_date ? release_date.substring(0, 4) : first_air_date.substring(0, 4) :
-        release_year = "Unknown"
+        if (backdrop_path !== undefined && poster_path !== undefined) {
+            release_date !== "" ?
+                release_year = release_date ? release_date.substring(0, 4) : first_air_date.substring(0, 4) :
+                release_year = "Unknown"
 
-        function timeConvert(n) {
-            var num = n;
-            var hours = (num / 60);
-            var rhours = Math.floor(hours);
-            var minutes = (hours - rhours) * 60;
-            var rminutes = Math.round(minutes);
-            return rhours + "h " + rminutes + "m";
+            function timeConvert(n) {
+                var num = n;
+                var hours = (num / 60);
+                var rhours = Math.floor(hours);
+                var minutes = (hours - rhours) * 60;
+                var rminutes = Math.round(minutes);
+                return rhours + "h " + rminutes + "m";
+            }
+
+            no_rate = "NR";
+
+            runtime = runtime ? timeConvert(runtime) : `Unavailable`;
         }
 
-        no_rate = "NR";
-
-        runtime = runtime ? timeConvert(runtime) : `Unavailable`;
-    }
-
-    /* =====================================
+        /* =====================================
         Tagline, rating, popularity, imdb_id
-    ===================================== */
-    const tagline = data.tagline;
-    const rating = data.vote_average;
-    const popularity = data.popularity;
-    const imdb_id = data.imdb_id;
+        ===================================== */
 
-    /* =====================================
-        Trailer
-    ===================================== */
+        tagline = getData.tagline;
+        rating = getData.vote_average;
+        popularity = getData.popularity;
+        imdb_id = getData.imdb_id;
 
-    let trailer,trailer_official;
-        if (data.videos.results.length > 0) {
-            trailer_official = data.videos.results.filter(item => {
+        /* =====================================
+            Trailer
+        ===================================== */
+
+        
+        if (getData.videos.results.length > 0) {
+            trailer_official = getData.videos.results.filter(item => {
                 return (item.type === 'Trailer' && item.official === true)
             });
 
             if (trailer_official.length === 0) {
-                trailer_official = data.videos.results.filter(item => {
+                trailer_official = getData.videos.results.filter(item => {
                     if (item.type === 'Trailer') {
                         return (item.type === 'Trailer')
                     }
@@ -152,10 +170,22 @@ const DetailHero = ({ data }) => {
         } else {
             trailer = null;
         }
+    }
 
     const handleTrailer = () => {
         setShowTrailer(prev => !prev);
     }
+
+    if (error) return (
+        <section className={styles.info_loading_error}>
+            <h1>⚠️ Error getting resources! ⚠️</h1>
+        </section>
+    )
+    if (!data) return (
+        <section className={styles.info_loading_error}>
+            <CircularProgress />
+        </section>
+    )
 
     return (
         <>
@@ -171,14 +201,12 @@ const DetailHero = ({ data }) => {
                         <div className={styles.flex_section}>
                             <div className={styles.detail_poster}>
                                 {
-                                    poster_path !== null ?
+                                    poster_path ?
                                         <Image src={`${poster_path}`} alt={`${title} poster`} layout='fill' priority /> :
                                         <div className={`${styles.detail_poster} ${styles.placeholder}`}>
                                             <InsertPhoto />
                                         </div>
                                 }
-
-
                             </div>
                             <div className={styles.detail_movie_content}>
                                 <div className={styles.detail_header}>
@@ -259,11 +287,11 @@ const DetailHero = ({ data }) => {
                                 {
                                     (title && release_year) &&
                                     (
-                                        
+
                                         <Torrent
-                                            title ={title}
-                                            year = {release_year}
-                                            imdb_id = {imdb_id}
+                                            title={title}
+                                            year={release_year}
+                                            imdb_id={imdb_id}
                                         />
                                     )
                                 }

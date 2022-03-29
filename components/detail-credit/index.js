@@ -1,4 +1,6 @@
+import { useState, useEffect } from 'react';
 import styles from './DetailCredit.module.scss'
+import useSWR from 'swr';
 import CastCard from './CastCard';
 import CrewCard from './CrewCard';
 import { nanoid } from '@reduxjs/toolkit';
@@ -16,84 +18,110 @@ import "swiper/css/navigation";
 // import required modules
 import { FreeMode } from "swiper";
 
-const DetailCredit = ({ data }) => {
+const fetcher = (...args) => fetch(...args).then(res => res.json());
 
-    // console.log(data);
-    const getCasts = data.cast;
-    const getCrews = data.crew;
+const DetailCredit = ({ id, media_type }) => {
 
+    const [ getData, setGetdata] = useState(null);
+    const { data, error } = useSWR(`https://api.themoviedb.org/3/${media_type}/${id}/credits?api_key=68d49bbc8d40fff0d6cafaa7bfd48072&language=en-US`, fetcher);
+
+    useEffect(()=> {
+        if(data){
+            setGetdata(data)
+        }
+    },[data]);
+
+    let getCasts,getCrews;
     let castsList, crewsList;
 
     let castsToShow,
         crewsToShow = [];
-    if (getCasts.length > 11) {
-        castsToShow = getCasts.slice(0, 11);
-    } else {
-        castsToShow = getCasts;
+
+    if(getData !== null){
+            // console.log(data);
+        getCasts = getData.cast;
+        getCrews = getData.crew;
+
+        if (getCasts.length > 11) {
+            castsToShow = getCasts.slice(0, 11);
+        } else {
+            castsToShow = getCasts;
+        }
+    
+        //  To Crews
+        getCrews.filter(item => {
+            item.job === 'Director' && crewsToShow.push(item);
+            return item.job === 'Director';
+        });
+    
+        getCrews.filter(item => {
+            item.job === 'Producer' && crewsToShow.push(item);
+            return item.job === 'Producer';
+        })
+    
+        getCrews.filter(item => {
+            item.job === 'Novel' && crewsToShow.push(item);
+            return item.job === 'Novel';
+        })
+    
+        getCrews.filter(item => {
+            item.job === 'Characters' && crewsToShow.push(item);
+            return item.job === 'Characters';
+        })
+    
+        getCrews.filter(item => {
+            item.job === 'Writer' && crewsToShow.push(item);
+            return item.job === 'Writer';
+        })
+    
+        getCrews.filter(item => {
+            item.job === 'Executive Producer' && crewsToShow.push(item);
+            return item.job === 'Executive Producer';
+        })
+    
+        castsList = castsToShow.map(item => {
+            return (
+                <SwiperSlide
+                    key={item.name}
+                >
+                    <CastCard
+                        name={item.name}
+                        profile_path={item.profile_path}
+                        image={`https://www.themoviedb.org/t/p/w138_and_h175_face/${item.profile_path}`}
+                        character={item.character}
+                    />
+                </SwiperSlide>
+            )
+        });
+    
+        crewsList = crewsToShow.map(item => {
+            return (
+                <SwiperSlide
+                    key={nanoid()}
+                >
+                    <CrewCard
+    
+                        image={item.profile_path}
+                        name={item.name}
+                        department={item.department}
+                        job={item.job}
+                    />
+                </SwiperSlide>
+    
+            )
+        });
     }
 
-    //  To Crews
-    getCrews.filter(item => {
-        item.job === 'Director' && crewsToShow.push(item);
-        return item.job === 'Director';
-    });
-
-    getCrews.filter(item => {
-        item.job === 'Producer' && crewsToShow.push(item);
-        return item.job === 'Producer';
-    })
-
-    getCrews.filter(item => {
-        item.job === 'Novel' && crewsToShow.push(item);
-        return item.job === 'Novel';
-    })
-
-    getCrews.filter(item => {
-        item.job === 'Characters' && crewsToShow.push(item);
-        return item.job === 'Characters';
-    })
-
-    getCrews.filter(item => {
-        item.job === 'Writer' && crewsToShow.push(item);
-        return item.job === 'Writer';
-    })
-
-    getCrews.filter(item => {
-        item.job === 'Executive Producer' && crewsToShow.push(item);
-        return item.job === 'Executive Producer';
-    })
-
-    castsList = castsToShow.map(item => {
-        return (
-            <SwiperSlide
-                key={item.name}
-            >
-                <CastCard
-                    name={item.name}
-                    profile_path={item.profile_path}
-                    image={`https://www.themoviedb.org/t/p/w138_and_h175_face/${item.profile_path}`}
-                    character={item.character}
-                />
-            </SwiperSlide>
-        )
-    });
-
-    crewsList = crewsToShow.map(item => {
-        return (
-            <SwiperSlide
-                key={nanoid()}
-            >
-                <CrewCard
-
-                    image={item.profile_path}
-                    name={item.name}
-                    department={item.department}
-                    job={item.job}
-                />
-            </SwiperSlide>
-
-        )
-    });
+    if (error) return (
+        <section className={styles.loading_error}>
+            <h1>⚠️ Error getting resources! ⚠️</h1>
+        </section>
+    )
+    if (!data) return (
+        <section className={styles.loading_error}>
+            <CircularProgress />
+        </section>
+    )
 
     return (
         <>

@@ -1,8 +1,15 @@
+import { useState, useEffect } from 'react';
 import styles from './DetailInfo.module.scss';
+import useSWR from 'swr';
+import { CircularProgress } from '@mui/material';
 import { InsertLinkOutlined } from '@mui/icons-material';
 import { Imdb, Facebook, Instagram, Twitter } from '@icons-pack/react-simple-icons';
 
-const DetailInfo = ({ data }) => {
+const fetcher = (...args) => fetch(...args).then(res => res.json());
+
+const DetailInfo = ({ id, media_type }) => {
+    const [ getData, setGetData ] = useState(null);
+    const { data, error } = useSWR(`https://api.themoviedb.org/3/${media_type}/${id}?api_key=68d49bbc8d40fff0d6cafaa7bfd48072&append_to_response=external_ids,keywords`, fetcher);
 
     let languages = [
         {
@@ -942,6 +949,12 @@ const DetailInfo = ({ data }) => {
         }
     ];
 
+    useEffect(()=> {
+        if(data) {
+            setGetData(data);
+        }
+    }, [data]);
+
     let homepage,
         facebook,
         twitter,
@@ -953,29 +966,28 @@ const DetailInfo = ({ data }) => {
         revenue,
         keywords;
 
-    if (data) {
+    if(getData !== null) {
+        homepage = getData.homepage;
 
-        homepage = data.homepage;
-
-        if (data.external_ids) {
-            facebook = data.external_ids.facebook_id;
-            twitter = data.external_ids.twitter_id;
-            instagram = data.external_ids.instagram_id;
-            imdb = data.external_ids.imdb_id;
+        if (getData.external_ids) {
+            facebook = getData.external_ids.facebook_id;
+            twitter = getData.external_ids.twitter_id;
+            instagram = getData.external_ids.instagram_id;
+            imdb = getData.external_ids.imdb_id;
         }
 
-        status = data.status;
+        status = getData.status;
         let getLanguage = languages.filter(item => {
-            return item.iso_639_1 === data.original_language
+            return item.iso_639_1 === getData.original_language
         })
         language = getLanguage[0].english_name;
-        data.budget && (budget = `$${data.budget.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`);
-        data.revenue && (revenue = `$${data.revenue.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`);
+        getData.budget && (budget = `$${getData.budget.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`);
+        getData.revenue && (revenue = `$${getData.revenue.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`);
 
-        if(data.keywords){
-            data.keywords.keywords &&
+        if(getData.keywords){
+            getData.keywords.keywords &&
             (
-                keywords = data.keywords.keywords.map(item => {
+                keywords = getData.keywords.keywords.map(item => {
                     return (
                         <span key={item.name} className={styles.keyword}>
                             {item.name}
@@ -984,9 +996,9 @@ const DetailInfo = ({ data }) => {
                 })
             )
 
-        data.keywords.results &&
+        getData.keywords.results &&
             (
-                keywords = data.keywords.results.map(item => {
+                keywords = getData.keywords.results.map(item => {
                     return (
                         <span key={item.name} className={styles.keyword}>
                             {item.name}
@@ -997,10 +1009,18 @@ const DetailInfo = ({ data }) => {
 
             keywords.length === 0 && (keywords = null);
         }
-        
-
-        
     }
+
+    if (error) return (
+        <section className={styles.loading_error}>
+            <h1>⚠️ Error getting resources! ⚠️</h1>
+        </section>
+    )
+    if (!data) return (
+        <section className={styles.loading_error}>
+            <CircularProgress />
+        </section>
+    )
 
     return (
         <>
