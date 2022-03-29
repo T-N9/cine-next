@@ -46,7 +46,7 @@ const DetailHero = ({ id, media_type }) => {
         Title, background, poster, release year, overview
         ===================================== */
         title = getData.name ? getData.name : getData.original_title;
-        backdrop_path = `https://www.themoviedb.org/t/p/w342/${getData.backdrop_path}`;
+        backdrop_path = `https://www.themoviedb.org/t/p/w780/${getData.backdrop_path}`;
         poster_path = `https://www.themoviedb.org/t/p/w342/${getData.poster_path}`;
         release_date = getData.release_date;
         overview = getData.overview;
